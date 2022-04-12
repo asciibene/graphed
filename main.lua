@@ -37,12 +37,12 @@ end
 
 -- -------------- START FUNC -----------
 function start()
-    nc.setcurshape("BLOCK") 
+    nc.setcurshape("BAR") 
     nc.clrscr()
     -- Make X functions
     map=mkmat()
     p=mkpointer()
-    
+        
     -- Now main loop
     main()
 end   
@@ -56,6 +56,9 @@ function drawmap()
             print(map[ix][iy])
         end
     end
+    -- XXX draw last info line XXX 
+    nc.gotoxy(0,MSIZE_Y+1)
+    print(p.x.." . "..p.y.."    ")
 end
 
 function drawmap_fg() -- Draw map foreground    
@@ -65,12 +68,10 @@ end
 ----------- main func -----
 function main()    
     while exitbool~=true do
-        if see==false then
+        if await_cmd()~=0 then
             drawmap()
             drawmap_fg()
-            see=true
-        end
-        await_cmd()
+        end         
     end
     exit()
 end
@@ -79,8 +80,6 @@ end
 function exit() -- Exits gracefully
     nc.clrscr()
     printul("Goodbye...")
-    
-
 end
 
 function mkpointer(pn)
@@ -108,21 +107,42 @@ function await_cmd()
         exitbool=true
     elseif k=="t" then
         showmesg("This is a test")
-        
+    elseif k=="c" then
+        changep()
+    elseif k=="." then 
+        paint(p.x,p.y,p.glyph)
+    elseif k=="x" then
+        paint(p.x,p.y," ")
+    elseif k=="o" then
+        -- TODO Set color
+    else         
+        return 0
     end
+
+end
+
+function paint(px,py,pg)
+    map[px][py]=pg
 end
 
 function movep(dx,dy)
    p.x=p.x+dx
    p.y=p.y+dy
-   see=false
+end
+
+function changep()
+   local c
+   showmesg("Press Enter and a new char:")
+   while c==nil do
+       c=string.char(nc.getch())
+   end
+   p.glyph=c
 end
 
 function showmesg(msg)
     nc.gotoxy(1,1)
     print(msg)
     nc.wait()
-    see=false
 end
 
 -- ------------------------------------------
