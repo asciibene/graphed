@@ -6,6 +6,12 @@ function printul(s)
     nc.setunderline(false)
 end
 
+function printcol(str,col)
+    nc.setfontcolor(col)
+    print(str)
+    nc.setfontcolor("WHITE")
+end
+
 function mkmat()
     local mt
     mt = {}          -- create the matrix
