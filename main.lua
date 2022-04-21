@@ -60,9 +60,6 @@ function main()
     printul("Goodbye...")
 
 end
-
-
-
 -- END OF MAKE FUNCS ========== MAKE =====
 function await_cmd()
     local k
@@ -108,7 +105,6 @@ function await_cmd()
 
 end
 
--- TODO make load func TODO
 function loadf(fn)
     local tbl
     fp=io.open(fn,"r")
